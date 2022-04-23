@@ -4,5 +4,18 @@
       "ns": "TeqFw_Web_Auth",
       "path": "./src"
     }
+  },
+  "@teqfw/web": {
+    "handlers": {
+      "TeqFw_Web_Auth_Back_Mod_Server_Handler": {
+        "before": ["TeqFw_Web_Back_App_Server_Handler_Static"],
+        "spaces": ["auth"]
+      }
+    },
+    "statics": {
+      "/tweetnacl-util/": "/tweetnacl-util/",
+      "/tweetnacl/": "/tweetnacl/",
+      "/uuid/": "/uuid/dist/esm-browser"
+    }
   }
 }

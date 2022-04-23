@@ -5,6 +5,8 @@ export default class TeqFw_Web_Auth_Shared_Defaults {
 
     NAME = '@teqfw/web-auth'; // plugin's node in 'teqfw.json' & './cfg/local.json'
 
+    SPACE_AUTH = 'auth';
+
     constructor() {
         Object.freeze(this);
     }

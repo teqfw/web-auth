@@ -27,6 +27,9 @@
   "homepage": "https://github.com/teqfw/web-auth#readme",
   "dependencies": {
     "@teqfw/db": "*",
-    "@teqfw/web": "*"
+    "@teqfw/web": "*",
+    "tweetnacl": "*",
+    "tweetnacl-util": "*",
+    "uuid": "*"
   }
 }
