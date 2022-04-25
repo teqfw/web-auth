@@ -12,9 +12,13 @@ export default class TeqFw_Web_Auth_Front_Mod_Connect {
         /** @type {TeqFw_Web_Front_Api_Gate_IErrorHandler} */
         const errHndl = spec['TeqFw_Web_Front_Api_Gate_IErrorHandler$'];
         /** @type {TeqFw_Web_Front_Api_Mod_Server_Connect_IState} */
-        const modConn = spec['TeqFw_Web_Front_Api_Mod_Server_Connect_IState$'];
+        const modState = spec['TeqFw_Web_Front_Api_Mod_Server_Connect_IState$'];
         /** @type {TeqFw_Web_Front_Mod_Config} */
         const modCfg = spec['TeqFw_Web_Front_Mod_Config$'];
+        /** @type {TeqFw_Web_Auth_Shared_Dto_Connect_Register_Request} */
+        const dtoReq = spec['TeqFw_Web_Auth_Shared_Dto_Connect_Register_Request$'];
+        /** @type {TeqFw_Web_Auth_Shared_Dto_Connect_Register_Response} */
+        const dtoRes = spec['TeqFw_Web_Auth_Shared_Dto_Connect_Register_Response$'];
 
         // VARS
         let BASE;
@@ -42,14 +46,36 @@ export default class TeqFw_Web_Auth_Front_Mod_Connect {
          *
          * @param {string} uuid
          * @param {string} publicKey
-         * @return {Promise<{frontId: number, backKeyPublic: string, backUuid: string}>}
+         * @return {Promise<TeqFw_Web_Auth_Shared_Dto_Connect_Register_Response.Dto>}
          */
         this.register = async function (uuid, publicKey) {
-            let frontId = 4;
-            let backUuid = 'uuid';
-            let backKeyPublic = 'key';
+            let res;
+            const req = dtoReq.createDto();
+            req.publicKey = publicKey;
+            req.uuid = uuid;
+            modState.startActivity();
+            try {
+                const URL = `${getBaseUrl()}`;
+                const fetched = await fetch(URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(req)
+                });
+                try {
+                    const json = await fetched.json();
+                    res = dtoRes.createDto(json);
+                } catch (e) {
+                    errHndl.error(e);
+                }
+            } catch (e) {
+                errHndl.error(e);
+            } finally {
+                modState.stopActivity();
+            }
 
-            return {frontId, backUuid, backKeyPublic};
+            return res;
         }
     }
 }

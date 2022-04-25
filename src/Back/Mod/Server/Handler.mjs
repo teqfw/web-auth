@@ -26,6 +26,18 @@ export default class TeqFw_Web_Auth_Back_Mod_Server_Handler {
         const DEF = spec['TeqFw_Web_Auth_Back_Defaults$'];
         /** @type {TeqFw_Core_Shared_Api_ILogger} */
         const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
+        /** @type {TeqFw_Db_Back_RDb_IConnect} */
+        const rdb = spec['TeqFw_Db_Back_RDb_IConnect$'];
+        /** @type {TeqFw_Web_Auth_Shared_Dto_Connect_Register_Request} */
+        const dtoReq = spec['TeqFw_Web_Auth_Shared_Dto_Connect_Register_Request$'];
+        /** @type {TeqFw_Web_Auth_Shared_Dto_Connect_Register_Response} */
+        const dtoRes = spec['TeqFw_Web_Auth_Shared_Dto_Connect_Register_Response$'];
+        /** @type {TeqFw_Web_Auth_Back_Act_Front_Create.act|function} */
+        const actCreate = spec['TeqFw_Web_Auth_Back_Act_Front_Create$'];
+        /** @type {TeqFw_Web_Back_Mod_Server_Key} */
+        const modKeys = spec['TeqFw_Web_Back_Mod_Server_Key$'];
+        /** @type {TeqFw_Core_Back_Mod_App_Uuid} */
+        const modBackUuid = spec['TeqFw_Core_Back_Mod_App_Uuid$'];
 
         // VARS
 
@@ -43,7 +55,23 @@ export default class TeqFw_Web_Auth_Back_Mod_Server_Handler {
             /** @type {TeqFw_Core_Shared_Mod_Map} */
             const shares = res[DEF.MOD_WEB.HNDL_SHARE];
             if (!res.headersSent && !shares.get(DEF.MOD_WEB.SHARE_RES_STATUS)) {
-
+                const dataOut = dtoRes.createDto();
+                const json = shares.get(DEF.MOD_WEB.SHARE_REQ_BODY_JSON);
+                const dataIn = dtoReq.createDto(json);
+                const trx = await rdb.startTransaction();
+                try {
+                    const {id} = await actCreate({trx, keyPub: dataIn.publicKey, uuid: dataIn.uuid});
+                    await trx.commit();
+                    dataOut.frontBid = id;
+                    dataOut.backKeyPublic = await modKeys.getPublic();
+                    dataOut.backUuid = modBackUuid.get();
+                    shares.set(DEF.MOD_WEB.SHARE_RES_BODY, JSON.stringify(dataOut));
+                } catch (e) {
+                    console.log(e);
+                    await trx.rollback();
+                    throw e;
+                }
+                debugger
             }
         }
 

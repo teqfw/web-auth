@@ -1,8 +1,8 @@
 /**
- * Model encapsulates front application's identity (UUID & asymmetric keys).
+ * Model encapsulates front application's identity (UUID & asymmetric keys for front, public key & UUID for back).
  * Generate identity (UUID & asymmetric key) and send public parts (UUID & public key) to the server.
  */
-export default class TeqFw_Web_Auth_Front_Mod_Identity_Front {
+export default class TeqFw_Web_Auth_Front_Mod_Identity {
     constructor(spec) {
         // DEPS
         /** @type {TeqFw_Web_Auth_Front_Defaults} */
@@ -11,57 +11,41 @@ export default class TeqFw_Web_Auth_Front_Mod_Identity_Front {
         const storeSingleton = spec['TeqFw_Web_Front_Mod_Store_Singleton$'];
         /** @type {TeqFw_Web_Auth_Front_Lib_Uuid.v4|function} */
         const uuidV4 = spec['TeqFw_Web_Auth_Front_Lib_Uuid.v4'];
-        /** @type {TeqFw_Web_Auth_Front_Dto_Identity_Front} */
-        const dtoIdentity = spec['TeqFw_Web_Auth_Front_Dto_Identity_Front$'];
+        /** @type {TeqFw_Web_Auth_Front_Dto_Identity} */
+        const dtoIdentity = spec['TeqFw_Web_Auth_Front_Dto_Identity$'];
         /** @type {TeqFw_Web_Shared_Api_Crypto_Key_IManager} */
         const mgrKeys = spec['TeqFw_Web_Shared_Api_Crypto_Key_IManager$'];
-        /** @type {TeqFw_Web_Api_Front_Mod_Connect} */
-        const wapi = spec['TeqFw_Web_Api_Front_Mod_Connect$'];
-        /** @type {TeqFw_Web_Api_Shared_WAPI_Front_Register} */
-        const wapiRegister = spec['TeqFw_Web_Api_Shared_WAPI_Front_Register$'];
         /** @type {TeqFw_Web_Auth_Front_Mod_Connect} */
         const connAuth = spec['TeqFw_Web_Auth_Front_Mod_Connect$'];
 
         // VARS
-        const KEY_IDENTITY = `${DEF.SHARED.NAME}/front/identity`;
-        /** @type {TeqFw_Web_Auth_Front_Dto_Identity_Front.Dto} */
+        const KEY_IDENTITY = `${DEF.SHARED.NAME}/identity`;
+        /** @type {TeqFw_Web_Auth_Front_Dto_Identity.Dto} */
         let _cache;
-
-        // FUNCS
-        async function sendToBack(uuid, publicKey) {
-            debugger
-            const {frontId, backUuid, backKeyPublic} = await connAuth.register(uuid, publicKey);
-
-
-            const req = wapiRegister.createReq();
-            req.publicKey = publicKey;
-            req.uuid = uuid;
-            /** @type {TeqFw_Web_Api_Shared_WAPI_Front_Register.Response} */
-            const res = await wapi.send(req, wapiRegister);
-            return res?.frontId;
-        }
 
         // INSTANCE METHODS
         /**
-         * Generate new identity and register it on backend.
+         * Load application identity from IDB or generate new identity and register it on backend.
          * @return {Promise<void>}
          */
         this.init = async function () {
-            /** @type {TeqFw_Web_Auth_Front_Dto_Identity_Front.Dto} */
+            /** @type {TeqFw_Web_Auth_Front_Dto_Identity.Dto} */
             const found = await storeSingleton.get(KEY_IDENTITY);
             if (found) _cache = found;
             else {
                 // this is first run, create identity and send it to the back
                 const dto = dtoIdentity.createDto();
-                dto.uuid = uuidV4();
-                dto.keys = await mgrKeys.generateAsyncKeys();
-                const frontId = await sendToBack(dto.uuid, dto.keys.public);
-                if (frontId) {
-                    dto.frontId = frontId;
+                dto.frontUuid = uuidV4();
+                dto.frontKeys = await mgrKeys.generateAsyncKeys();
+                const regData = await connAuth.register(dto.frontUuid, dto.frontKeys.public);
+                if (regData) {
+                    dto.frontBid = regData.frontBid;
+                    dto.backKeyPublic = regData.backKeyPublic;
+                    dto.backUuid = regData.backUuid;
                     await storeSingleton.set(KEY_IDENTITY, dto);
                     _cache = dto;
                 } else {
-                    throw new Error('Fatal error. Cannot register new front app on the back.');
+                    throw new Error('Fatal error. Cannot register new identity on the back.');
                 }
             }
         }
@@ -69,14 +53,17 @@ export default class TeqFw_Web_Auth_Front_Mod_Identity_Front {
         /**
          * Register current identity on backend.
          * @return {Promise<void>}
+         * @deprecated we don't use this method in event plugin more
          */
         this.registerOnBack = async function () {
-            /** @type {TeqFw_Web_Auth_Front_Dto_Identity_Front.Dto} */
+            /** @type {TeqFw_Web_Auth_Front_Dto_Identity.Dto} */
             const found = await storeSingleton.get(KEY_IDENTITY);
             if (found) {
-                const frontId = await sendToBack(found.uuid, found.keys.public);
-                if (frontId) {
-                    found.frontId = frontId;
+                const regData = await connAuth.register(found.frontUuid, found.frontKeys.public);
+                if (regData) {
+                    found.frontBid = regData.frontBid;
+                    found.backKeyPublic = regData.backKeyPublic;
+                    found.backUuid = regData.backUuid;
                     await storeSingleton.set(KEY_IDENTITY, found);
                     _cache = found;
                 } else throw new Error('Fatal error. Cannot register existing front app on the back.');
@@ -84,30 +71,41 @@ export default class TeqFw_Web_Auth_Front_Mod_Identity_Front {
         }
 
         /**
-         * @return {TeqFw_Web_Auth_Front_Dto_Identity_Front.Dto}
+         * @return {TeqFw_Web_Auth_Front_Dto_Identity.Dto}
          */
         this.get = () => _cache;
+        /**
+         * Get backend public key for asymmetric encryption.
+         * @return {string}
+         */
+        this.getBackKey = () => _cache?.backKeyPublic;
+
+        /**
+         * Get UUID for current backend.
+         * @return {string}
+         */
+        this.getBackUuid = () => _cache?.backUuid;
+
         /**
          * Front ID from backend RDB.
          * @return {number}
          */
-        this.getFrontId = () => _cache?.frontId;
+        this.getFrontBid = () => _cache?.frontBid;
 
+        /**
+         * @return {string}
+         */
+        this.getFrontUuid = () => _cache?.frontUuid;
         /**
          * Front's public key for asymmetric encryption.
          * @type {string}
          */
-        this.getPublicKey = () => _cache?.keys?.public;
-
+        this.getPublicKey = () => _cache?.frontKeys?.public;
         /**
          * Front's secret key for asymmetric encryption.
          * @type {string}
          */
-        this.getSecretKey = () => _cache?.keys?.secret;
-        /**
-         * @return {string}
-         */
-        this.getUuid = () => _cache?.uuid;
+        this.getSecretKey = () => _cache?.frontKeys?.secret;
 
     }
 }

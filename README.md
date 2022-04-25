@@ -62,5 +62,4 @@ This plugin uses `TeqFw_Web_Auth` namespace.
 ### Front models
 
 * `TeqFw_Web_Auth_Front_Mod_Connect`: connector to backend to process authentication requests to server.
-* `TeqFw_Web_Auth_Front_Mod_Identity_Back`: encapsulates backend identification data.
-* `TeqFw_Web_Auth_Front_Mod_Identity_Front`: encapsulates frontend identification data.
+* `TeqFw_Web_Auth_Front_Mod_Identity`: encapsulates identification data for application.
