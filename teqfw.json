@@ -18,7 +18,7 @@
   },
   "@teqfw/core": {
     "commands": [
-      "TeqFw_Web_Auth_Back_Cli_Crypto_Key_Create"
+      "TeqFw_Web_Auth_Back_Cli_Key_Create"
     ]
   },
   "@teqfw/web": {

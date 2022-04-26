@@ -1,14 +1,14 @@
 /**
  * Create new server keys for asymmetric encryption.
  *
- * @namespace TeqFw_Web_Auth_Back_Cli_Crypto_Key_Create
+ * @namespace TeqFw_Web_Auth_Back_Cli_Key_Create
  */
 // MODULE'S IMPORT
 import {join} from 'path';
 import {existsSync, writeFileSync} from 'fs';
 
 // MODULE'S VARS
-const NS = 'TeqFw_Web_Auth_Back_Cli_Crypto_Key_Create';
+const NS = 'TeqFw_Web_Auth_Back_Cli_Key_Create';
 
 // MODULE'S FUNCTIONS
 /**
@@ -17,7 +17,7 @@ const NS = 'TeqFw_Web_Auth_Back_Cli_Crypto_Key_Create';
  * @param {TeqFw_Di_Shared_SpecProxy} spec
  * @returns {TeqFw_Core_Back_Api_Dto_Command}
  * @constructor
- * @memberOf TeqFw_Web_Auth_Back_Cli_Crypto_Key_Create
+ * @memberOf TeqFw_Web_Auth_Back_Cli_Key_Create
  */
 export default function Factory(spec) {
     // DEPS
@@ -36,7 +36,7 @@ export default function Factory(spec) {
     /**
      * Command action.
      * @returns {Promise<void>}
-     * @memberOf TeqFw_Web_Auth_Back_Cli_Crypto_Key_Create
+     * @memberOf TeqFw_Web_Auth_Back_Cli_Key_Create
      */
     async function action() {
         logger.reset(false); // clear log and unfreeze output
@@ -61,7 +61,7 @@ export default function Factory(spec) {
     // MAIN
     const res = fCommand.create();
     res.realm = DEF.CLI_PREFIX;
-    res.name = 'crypto-keys-create';
+    res.name = 'keys-create';
     res.desc = 'Create new server keys for asynchronous encryption.';
     res.action = action;
     return res;
