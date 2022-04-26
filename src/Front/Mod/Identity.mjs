@@ -13,8 +13,8 @@ export default class TeqFw_Web_Auth_Front_Mod_Identity {
         const uuidV4 = spec['TeqFw_Web_Auth_Front_Lib_Uuid.v4'];
         /** @type {TeqFw_Web_Auth_Front_Dto_Identity} */
         const dtoIdentity = spec['TeqFw_Web_Auth_Front_Dto_Identity$'];
-        /** @type {TeqFw_Web_Shared_Api_Crypto_Key_IManager} */
-        const mgrKeys = spec['TeqFw_Web_Shared_Api_Crypto_Key_IManager$'];
+        /** @type {TeqFw_Web_Auth_Shared_Api_Crypto_Key_IManager} */
+        const mgrKeys = spec['TeqFw_Web_Auth_Shared_Api_Crypto_Key_IManager$'];
         /** @type {TeqFw_Web_Auth_Front_Mod_Connect} */
         const connAuth = spec['TeqFw_Web_Auth_Front_Mod_Connect$'];
 

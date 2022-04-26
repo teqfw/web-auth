@@ -3,6 +3,10 @@
  */
 export default class TeqFw_Web_Auth_Back_Defaults {
 
+    CLI_PREFIX = 'web-auth'; // prefix in CLI commands
+
+    FILE_CRYPTO_KEYS = './cfg/local.crypto.keys.json';
+
     /** @type {TeqFw_Web_Back_Defaults} */
     MOD_WEB;
 

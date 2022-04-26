@@ -34,8 +34,8 @@ export default class TeqFw_Web_Auth_Back_Mod_Server_Handler {
         const dtoRes = spec['TeqFw_Web_Auth_Shared_Dto_Connect_Register_Response$'];
         /** @type {TeqFw_Web_Auth_Back_Act_Front_Create.act|function} */
         const actCreate = spec['TeqFw_Web_Auth_Back_Act_Front_Create$'];
-        /** @type {TeqFw_Web_Back_Mod_Server_Key} */
-        const modKeys = spec['TeqFw_Web_Back_Mod_Server_Key$'];
+        /** @type {TeqFw_Web_Auth_Back_Mod_Server_Key} */
+        const modKeys = spec['TeqFw_Web_Auth_Back_Mod_Server_Key$'];
         /** @type {TeqFw_Core_Back_Mod_App_Uuid} */
         const modBackUuid = spec['TeqFw_Core_Back_Mod_App_Uuid$'];
 

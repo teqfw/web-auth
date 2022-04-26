@@ -44,8 +44,8 @@ class Dto {
 export default class TeqFw_Web_Auth_Back_RDb_Schema_Front {
     constructor(spec) {
         // DEPS
-        /** @type {TeqFw_Web_Back_Defaults} */
-        const DEF = spec['TeqFw_Web_Back_Defaults$'];
+        /** @type {TeqFw_Web_Auth_Back_Defaults} */
+        const DEF = spec['TeqFw_Web_Auth_Back_Defaults$'];
         /** @type {TeqFw_Db_Back_RDb_Schema_EntityBase} */
         const base = spec['TeqFw_Db_Back_RDb_Schema_EntityBase$'];
         /** @type {TeqFw_Core_Shared_Util_Cast.castDate|function} */
