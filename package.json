@@ -29,7 +29,6 @@
     "@teqfw/db": "*",
     "@teqfw/web": "*",
     "tweetnacl": "*",
-    "tweetnacl-util": "*",
     "uuid": "*"
   }
 }

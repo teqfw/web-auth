@@ -4,7 +4,6 @@
  */
 // MODULE'S IMPORT
 import nacl from 'tweetnacl'; // as CommonJS module
-import util from 'tweetnacl-util'; // as CommonJS module
 
 /**
  * @implements TeqFw_Web_Auth_Shared_Api_Crypto_Key_IManager
@@ -15,17 +14,20 @@ export default class TeqFw_Web_Auth_Back_Mod_Crypto_Key_Manager {
         // DEPS
         /** @type {TeqFw_Web_Shared_Dto_Identity_Keys} */
         const dtoKeys = spec['TeqFw_Web_Shared_Dto_Identity_Keys$'];
+        /** @type {TeqFw_Core_Shared_Api_Util_ICodec} */
+        const util = spec['TeqFw_Core_Shared_Api_Util_ICodec$'];
 
+        // INSTANCE METHODS
         this.generateAsyncKeys = async function () {
             const res = dtoKeys.createDto();
             const keysBuf = nacl.box.keyPair();
-            res.secret = util.encodeBase64(keysBuf.secretKey);
-            res.public = util.encodeBase64(keysBuf.publicKey);
+            res.secret = util.ab2b64(keysBuf.secretKey);
+            res.public = util.ab2b64(keysBuf.publicKey);
             return res;
         }
 
         this.generateSecretKey = async function () {
-            return util.encodeBase64(nacl.randomBytes(nacl.secretbox.keyLength));
+            return util.ab2b64(nacl.randomBytes(nacl.secretbox.keyLength));
         }
     }
 }

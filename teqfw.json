@@ -29,7 +29,6 @@
       }
     },
     "statics": {
-      "/tweetnacl-util/": "/tweetnacl-util/",
       "/tweetnacl/": "/tweetnacl/",
       "/uuid/": "/uuid/dist/esm-browser"
     }

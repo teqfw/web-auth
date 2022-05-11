@@ -11,26 +11,16 @@ export default class TeqFw_Web_Auth_Front_Mod_Crypto_Scrambler {
         const box = spec['TeqFw_Web_Auth_Front_Lib_Nacl.box'];
         /** @type {TeqFw_Web_Auth_Front_Lib_Nacl.randomBytes|function} */
         const randomBytes = spec['TeqFw_Web_Auth_Front_Lib_Nacl.randomBytes'];
-        /** @type {TeqFw_Web_Auth_Front_Lib_Nacl_Util.decodeBase64|function} */
-        const decodeBase64 = spec['TeqFw_Web_Auth_Front_Lib_Nacl_Util.decodeBase64'];
-        /** @type {TeqFw_Web_Auth_Front_Lib_Nacl_Util.encodeBase64|function} */
-        const encodeBase64 = spec['TeqFw_Web_Auth_Front_Lib_Nacl_Util.encodeBase64'];
-        /** @type {TeqFw_Web_Auth_Front_Lib_Nacl_Util.decodeUTF8|function} */
-        const decodeUTF8 = spec['TeqFw_Web_Auth_Front_Lib_Nacl_Util.decodeUTF8'];
-        /** @type {TeqFw_Web_Auth_Front_Lib_Nacl_Util.encodeUTF8|function} */
-        const encodeUTF8 = spec['TeqFw_Web_Auth_Front_Lib_Nacl_Util.encodeUTF8'];
+        /** @type {TeqFw_Core_Shared_Api_Util_ICodec} */
+        const util = spec['TeqFw_Core_Shared_Api_Util_ICodec$'];
 
         // VARS
         let _keyShared;
 
-        // MAIN
-
-        // FUNCS
-
         // INSTANCE METHODS
         this.decryptAndVerify = function (encrypted) {
             let res = null;
-            const messageWithNonceAsUint8Array = decodeBase64(encrypted);
+            const messageWithNonceAsUint8Array = util.b642ab(encrypted);
             const nonce = messageWithNonceAsUint8Array.slice(0, box.nonceLength);
             const message = messageWithNonceAsUint8Array.slice(
                 box.nonceLength,
@@ -38,25 +28,25 @@ export default class TeqFw_Web_Auth_Front_Mod_Crypto_Scrambler {
             );
             const decryptedAb = box.open.after(message, nonce, _keyShared);
             if (decryptedAb) {
-                const jsonStr = encodeUTF8(decryptedAb);
+                const jsonStr = util.ab2utf(decryptedAb);
                 res = JSON.parse(jsonStr);
             }
             return res;
         }
 
         this.encryptAndSign = function (plain) {
-            const messageUint8 = decodeUTF8(JSON.stringify(plain));
+            const messageUint8 = util.utf2ab(JSON.stringify(plain));
             const nonce = randomBytes(box.nonceLength);
             const encrypted = box.after(messageUint8, nonce, _keyShared);
             const fullMessage = new Uint8Array(nonce.length + encrypted.length);
             fullMessage.set(nonce);
             fullMessage.set(encrypted, nonce.length);
-            return encodeBase64(fullMessage);
+            return util.ab2b64(fullMessage);
         }
 
         this.setKeys = function (pub, sec) {
-            const abPub = decodeBase64(pub);
-            const abSec = decodeBase64(sec);
+            const abPub = util.b642ab(pub);
+            const abSec = util.b642ab(sec);
             _keyShared = box.before(abPub, abSec);
         }
     }
