@@ -71,7 +71,7 @@ export default class TeqFw_Web_Auth_Back_Mod_Server_Handler {
                     await trx.rollback();
                     throw e;
                 }
-                debugger
+                // debugger
             }
         }
 
