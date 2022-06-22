@@ -9,10 +9,7 @@ import {constants as H2} from 'http2';
 // MODULE'S VARS
 const NS = 'TeqFw_Web_Auth_Back_Mod_Server_Handler';
 const {
-    HTTP2_HEADER_CONTENT_TYPE,
-    HTTP2_METHOD_GET,
     HTTP2_METHOD_POST,
-    HTTP_STATUS_OK,
 } = H2;
 
 // MODULE'S CLASSES
@@ -44,7 +41,7 @@ export default class TeqFw_Web_Auth_Back_Mod_Server_Handler {
 
         // FUNCS
         /**
-         * Process request if address space is equal to 'api'.
+         * Process request if address space is equal to 'auth'.
          * @param {module:http.IncomingMessage|module:http2.Http2ServerRequest} req
          * @param {module:http.ServerResponse|module:http2.Http2ServerResponse} res
          */
