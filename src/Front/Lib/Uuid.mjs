@@ -8,6 +8,7 @@
 import asV4 from '../../../../uuid/v4.js';
 import asValidate from '../../../../uuid/validate.js';
 
+// TODO: use Crypto.randomUUID() (https://developer.mozilla.org/en-US/docs/Web/API/Crypto/randomUUID)
 
 // MODULE'S VARS
 // these intermediary variables are used to set JSDocs comments to export.
