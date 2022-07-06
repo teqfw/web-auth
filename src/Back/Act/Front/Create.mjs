@@ -1,5 +1,5 @@
 /**
- * Registry new front in RDB.
+ * Register new front in RDB.
  *
  * @namespace TeqFw_Web_Auth_Back_Act_Front_Create
  */
