@@ -2,8 +2,8 @@
 
 TeqFW plugin to authenticate web requests.
 
-| CAUTION: TeqFW is an unstable, fast-growing project w/o backward compatibility. Use it at your own risk. |
-| -------------------------------------------------------------------------------------------------------- |
+| CAUTION: TeqFW is an unstable project w/o backward compatibility. Use it at your own risk. |
+|--------------------------------------------------------------------------------------------|
 
 This `teq`-plugin contains functionality to register new fronts (browsers) on backend, to generate keys for asymmetric
 encryption on front & back and to sign/encrypt data transmitted between front & back.

@@ -59,10 +59,15 @@ export default class TeqFw_Web_Auth_Back_Mod_Server_Handler {
                 try {
                     const {id} = await actCreate({trx, keyPub: dataIn.publicKey, uuid: dataIn.uuid});
                     await trx.commit();
-                    dataOut.frontBid = id;
-                    dataOut.backKeyPublic = await modKeys.getPublic();
-                    dataOut.backUuid = modBackUuid.get();
-                    shares.set(DEF.MOD_WEB.SHARE_RES_BODY, JSON.stringify(dataOut));
+                    if (id) {
+                        dataOut.frontBid = id;
+                        dataOut.backKeyPublic = await modKeys.getPublic();
+                        dataOut.backUuid = modBackUuid.get();
+                        shares.set(DEF.MOD_WEB.SHARE_RES_BODY, JSON.stringify(dataOut));
+                    } else {
+                        logger.error(`Cannot register frontend with uuid '${dataIn.uuid}'. `
+                            + `There is some other frontend with the same UUID and different public key.`);
+                    }
                 } catch (e) {
                     console.log(e);
                     await trx.rollback();
