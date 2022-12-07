@@ -24,7 +24,7 @@ export default class TeqFw_Web_Auth_Back_Mod_Server_Handler {
         /** @type {TeqFw_Core_Shared_Api_ILogger} */
         const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
-        const rdb = spec['TeqFw_Db_Back_RDb_IConnect$'];
+        const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {TeqFw_Web_Auth_Shared_Dto_Connect_Register_Request} */
         const dtoReq = spec['TeqFw_Web_Auth_Shared_Dto_Connect_Register_Request$'];
         /** @type {TeqFw_Web_Auth_Shared_Dto_Connect_Register_Response} */
@@ -55,7 +55,7 @@ export default class TeqFw_Web_Auth_Back_Mod_Server_Handler {
                 const dataOut = dtoRes.createDto();
                 const json = shares.get(DEF.MOD_WEB.SHARE_REQ_BODY_JSON);
                 const dataIn = dtoReq.createDto(json);
-                const trx = await rdb.startTransaction();
+                const trx = await conn.startTransaction();
                 try {
                     const {id} = await actCreate({trx, keyPub: dataIn.publicKey, uuid: dataIn.uuid});
                     await trx.commit();
