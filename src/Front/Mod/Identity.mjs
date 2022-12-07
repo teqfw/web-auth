@@ -96,6 +96,7 @@ export default class TeqFw_Web_Auth_Front_Mod_Identity {
          * @return {string}
          */
         this.getFrontUuid = () => _cache?.frontUuid;
+
         /**
          * Front's public key for asymmetric encryption.
          * @type {string}
@@ -106,6 +107,15 @@ export default class TeqFw_Web_Auth_Front_Mod_Identity {
          * @type {string}
          */
         this.getSecretKey = () => _cache?.frontKeys?.secret;
+
+        this.getTabUuid = () => {
+            let res = sessionStorage.getItem(DEF.STORE_SESS_KEY_TAB_UUID);
+            if (!res) {
+                res = self.crypto.randomUUID();
+                sessionStorage.setItem(DEF.STORE_SESS_KEY_TAB_UUID, res);
+            }
+            return res;
+        }
 
     }
 }
