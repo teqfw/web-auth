@@ -41,7 +41,7 @@ export default function Factory(spec) {
     async function action() {
         logger.reset(false); // clear log and unfreeze output
         try {
-            const root = config.getBoot().projectRoot;
+            const root = config.getPathToRoot();
             const path = join(root, DEF.FILE_CRYPTO_KEYS);
             if (!(existsSync(path))) {
                 const keys = await mgrKey.generateAsyncKeys();
