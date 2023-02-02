@@ -21,8 +21,8 @@ export default class TeqFw_Web_Auth_Back_Mod_Server_Handler {
         // DEPS
         /** @type {TeqFw_Web_Auth_Back_Defaults} */
         const DEF = spec['TeqFw_Web_Auth_Back_Defaults$'];
-        /** @type {TeqFw_Core_Shared_Api_ILogger} */
-        const logger = spec['TeqFw_Core_Shared_Api_ILogger$$']; // instance
+        /** @type {TeqFw_Core_Shared_Api_Logger} */
+        const logger = spec['TeqFw_Core_Shared_Api_Logger$$']; // instance
         /** @type {TeqFw_Db_Back_RDb_IConnect} */
         const conn = spec['TeqFw_Db_Back_RDb_IConnect$'];
         /** @type {TeqFw_Web_Auth_Shared_Dto_Connect_Register_Request} */

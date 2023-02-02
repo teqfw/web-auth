@@ -10,8 +10,8 @@ export default class TeqFw_Web_Auth_Front_Mod_Crypto_Key_Manager {
     constructor(spec) {
         // DEPS
         const {box, secretbox, randomBytes} = spec['TeqFw_Web_Auth_Front_Lib_Nacl'];
-        /** @type {TeqFw_Core_Shared_Api_Util_ICodec} */
-        const util = spec['TeqFw_Core_Shared_Api_Util_ICodec$'];
+        /** @type {TeqFw_Core_Shared_Api_Util_Codec} */
+        const util = spec['TeqFw_Core_Shared_Api_Util_Codec$'];
         /** @type {TeqFw_Web_Shared_Dto_Identity_Keys} */
         const dtoKeys = spec['TeqFw_Web_Shared_Dto_Identity_Keys$'];
 
