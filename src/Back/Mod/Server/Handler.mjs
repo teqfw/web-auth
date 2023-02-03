@@ -4,7 +4,7 @@
  * @namespace TeqFw_Web_Auth_Back_Mod_Server_Handler
  */
 // MODULE'S IMPORT
-import {constants as H2} from 'http2';
+import {constants as H2} from 'node:http2';
 
 // MODULE'S VARS
 const NS = 'TeqFw_Web_Auth_Back_Mod_Server_Handler';
@@ -49,11 +49,11 @@ export default class TeqFw_Web_Auth_Back_Mod_Server_Handler {
             // FUNCS
 
             // MAIN
-            /** @type {TeqFw_Core_Shared_Mod_Map} */
+            /** @type {Object} */
             const shares = res[DEF.MOD_WEB.HNDL_SHARE];
-            if (!res.headersSent && !shares.get(DEF.MOD_WEB.SHARE_RES_STATUS)) {
+            if (!res.headersSent && !shares[DEF.MOD_WEB.SHARE_RES_STATUS]) {
                 const dataOut = dtoRes.createDto();
-                const json = shares.get(DEF.MOD_WEB.SHARE_REQ_BODY_JSON);
+                const json = shares[DEF.MOD_WEB.SHARE_REQ_BODY_JSON];
                 const dataIn = dtoReq.createDto(json);
                 const trx = await conn.startTransaction();
                 try {
@@ -63,7 +63,7 @@ export default class TeqFw_Web_Auth_Back_Mod_Server_Handler {
                         dataOut.frontBid = id;
                         dataOut.backKeyPublic = await modKeys.getPublic();
                         dataOut.backUuid = modBackUuid.get();
-                        shares.set(DEF.MOD_WEB.SHARE_RES_BODY, JSON.stringify(dataOut));
+                        shares[DEF.MOD_WEB.SHARE_RES_BODY] = JSON.stringify(dataOut);
                     } else {
                         logger.error(`Cannot register frontend with uuid '${dataIn.uuid}'. `
                             + `There is some other frontend with the same UUID and different public key.`);
